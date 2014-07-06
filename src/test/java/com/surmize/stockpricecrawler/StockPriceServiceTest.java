@@ -16,13 +16,13 @@ public class StockPriceServiceTest {
         symbols.add("AAPL");
         symbols.add("GOOG");
         symbols.add("FB");
-        symbols.add("AMZN");
+        symbols.add("SBUX");
         
         StockPriceService service = new StockPriceService();
         List<StockPrice> prices = service.getStockPriceData(symbols);
         Assert.assertTrue(prices.size() == 4);
         for (StockPrice stockPrice : prices) {
-            System.out.println(stockPrice.stockSymbol+" "+stockPrice.price);
+            System.out.println(stockPrice.stockSymbol+" "+stockPrice.price+" "+stockPrice.tradeTime);
         }
     }
     

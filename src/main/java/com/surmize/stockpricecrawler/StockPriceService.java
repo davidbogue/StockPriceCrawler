@@ -19,14 +19,23 @@ public class StockPriceService {
     private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("M/d/yyyy h:mma z", Locale.ENGLISH);
     
     public List<StockPrice> getStockPriceData(List<String> symbols){
-        BufferedReader in = null;
         List<StockPrice> prices = new ArrayList<>();
+        for(int i=0; i<symbols.size(); i=i+100){
+            int endIndex = Math.min(symbols.size(), i+100);
+            callStockPriceAPI(prices, symbols.subList(i, endIndex));
+        }
+        return prices;
+    }
+    
+    private void callStockPriceAPI(List<StockPrice> prices, List<String> symbols){
+        BufferedReader in = null;
         try {
             URL priceUrl = new URL(buildUrlString(symbols));
             in = new BufferedReader( new InputStreamReader(priceUrl.openStream()));
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 String[] stockArray = inputLine.split(",");
+                System.out.println("WORKING ON SYMBOL "+stockArray[0]);
                 StockPrice sp = new StockPrice();
                 sp.stockSymbol =  removeQuotes(stockArray[0]);
                 sp.tradeTime = getDateFromDatePlusTime(stockArray[1], stockArray[2]);
@@ -47,7 +56,6 @@ public class StockPriceService {
                 logger.log(Level.SEVERE, null, ex);
             }
         }
-        return prices;
     }
     
     private String buildUrlString(List<String> symbols){
@@ -74,7 +82,6 @@ public class StockPriceService {
             logger.log(Level.SEVERE, "Error Parsing Date "+dateString, ex);
             return new Date();
         }
-        
     }
      
     private Float getFloat(String floatMe){
