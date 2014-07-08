@@ -35,7 +35,6 @@ public class StockPriceService {
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 String[] stockArray = inputLine.split(",");
-                System.out.println("WORKING ON SYMBOL "+stockArray[0]);
                 StockPrice sp = new StockPrice();
                 sp.stockSymbol =  removeQuotes(stockArray[0]);
                 sp.tradeTime = getDateFromDatePlusTime(stockArray[1], stockArray[2]);
